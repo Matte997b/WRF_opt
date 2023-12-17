@@ -15,12 +15,13 @@ from skimage.measure import block_reduce
 def main():
     
     #var, hgt = get_wrf_timeseries('T', 15, 10, 0) 
-    var, hgt = df_2D('T', 0, 0)
- 
-    print(var)
-    print(hgt)
+    time = 10
+    z_lvl = 0
+    var = df_2D('T', z_lvl, time)
     
-    plot_2D(var['variable'], var['lon'], var['lat'])
+    print(var.indexes)
+ 
+    plot_2D(var, z_lvl, time)
     
     
 if __name__=="__main__":
