@@ -17,11 +17,17 @@ def main():
     #var, hgt = get_wrf_timeseries('T', 15, 10, 0) 
     time = 10
     z_lvl = 0
-    var = df_2D('T', z_lvl, time)
+    T_ = df_2D('T', z_lvl, time)
+    Alpha = df_2D('ALBEDO', z_lvl, time)
+    HF = df_2D('HFX', z_lvl, time)
     
-    print(var.indexes)
+    print(T_.indexes)
+    print(Alpha.indexes)
+    print(HF.indexes)
  
-    plot_2D(var, z_lvl, time)
+    plot_2D(T_, z_lvl, time)
+    plot_2D(Alpha, z_lvl, time)
+    plot_2D(HF, z_lvl, time)
     
     
 if __name__=="__main__":

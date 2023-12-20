@@ -49,13 +49,18 @@ def df_2D(param, zagl, t):
         # Extract lon, lat, and variable values for a fixed time and altitude
         lon = ds.XLONG[0, :, :]
         lat = ds.XLAT[0, :, :]
+        
 
-        if param == 'T':
+        if param == 'T' and np.ndim(ds[param]) >= 4:
             # WRF output is perturbation potential temperature
             vararray = ds[param][t, zagl, :, :] + 300
-        else:
+        
+        elif np.ndim(ds[param]) >= 4:
             vararray = ds[param][t, zagl, :, :]
-
+        
+        else:
+            vararray = ds[param][t, :, :]
+            
     #Data array creation
     data_array = xr.DataArray(
         vararray.values,
