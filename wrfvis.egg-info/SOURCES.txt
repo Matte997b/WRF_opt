@@ -1,6 +1,7 @@
 LICENSE
 README.md
 setup.py
+wrfvis/Two_dim_plot.py
 wrfvis/__init__.py
 wrfvis/cfg.py
 wrfvis/cltools.py

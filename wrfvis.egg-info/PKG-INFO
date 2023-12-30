@@ -8,9 +8,8 @@ Author-email:
 Classifier: Development Status :: 3 - Alpha
 Classifier: Programming Language :: Python :: 3
 Description-Content-Type: text/markdown
-License-File: LICENSE
 Provides-Extra: test
-Requires-Dist: pytest; extra == "test"
+License-File: LICENSE
 
 # A visualization package for WRF model output
 
