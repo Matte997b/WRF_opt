@@ -1,16 +1,15 @@
 Metadata-Version: 2.1
-Name: wrfvis
-Version: 0.0.1
+Name: wrfvis-o
+Version: 1.0.0
 Summary: A WRF model output visualization software
 Home-page: 
-Author: Manuela Lehner
+Author: Mattia Battisti
 Author-email: 
 Classifier: Development Status :: 3 - Alpha
 Classifier: Programming Language :: Python :: 3
 Description-Content-Type: text/markdown
-License-File: LICENSE
 Provides-Extra: test
-Requires-Dist: pytest; extra == "test"
+License-File: LICENSE
 
 # A visualization package for WRF model output
 
@@ -32,6 +31,8 @@ Make sure you have all dependencies installed. These are:
 - netcdf4
 - matplotlib
 - pytest
+- arparse
+- skimage
 
 Download the package and install it in development mode. From the root directory,
 do:

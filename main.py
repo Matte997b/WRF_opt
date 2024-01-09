@@ -1,35 +1,48 @@
+#Just a module to develope the command proposed by the author in this package
+#NB this module can be useful to understand data structure and plots but its limited
+#because user cannot choose the variable from command line
+
+
 from wrfvis.core import write_html
 from wrfvis.core import get_wrf_timeseries
-#from wrfvis.grid import haversine
-#from wrfvis.grid import find_nearest_gridcell
-#from wrfvis.grid import find_nearest_vlevel
-from wrfvis.Two_dim_plot import df_2D, plot_2D
-
+from wrfvis.Two_dim_plot import df_2D, plot_2D, df_2D_geo #, find_geopotential_height_all_locations
 import numpy as np
-import pandas as pd
 import xarray as xr
-import netCDF4
 import matplotlib.pyplot as plt
-from skimage.measure import block_reduce
 
 def main():
     
-    #var, hgt = get_wrf_timeseries('T', 15, 10, 0) 
-    time = 10
+    time = 0
     z_lvl = 0
-    T_ = df_2D('T', z_lvl, time)
-    Alpha = df_2D('ALBEDO', z_lvl, time)
-    HF = df_2D('HFX', z_lvl, time)
+    var ='T'
     
-    print(T_.indexes)
-    print(Alpha.indexes)
-    print(HF.indexes)
+    #T_= df_2D('T', z_lvl, time)
+    #T_g = df_2D('T', z_lvl, time)
+    #Alpha = df_2D('ALBEDO', z_lvl, time)
+    #HF = df_2D('HFX', z_lvl, time)
+    #HF = df_2D(grid.wrf_zagl, z_lvl, time)
+    
+    #T_ = df_2D(var, z_lvl, time)
+    ds = get_wrf_timeseries(var, 10, 40, 0)
+    #T_g = df_2D_geo(var, z_lvl, time)
+    
+    #lon = da['XLONG'].values[0, :, :]
+    #lat = da['XLAT'].values[0, :, :]
+    #print(T_.indexes)
+    #print(T_)
+    #print(Alpha.indexes)
+    #print(HF.indexes)
  
-    plot_2D(T_, z_lvl, time)
-    plot_2D(Alpha, z_lvl, time)
-    plot_2D(HF, z_lvl, time)
+    #a = plot_2D(T_, time, z_lvl)
+    #plt.show(a)
+    #plot_topo(HGT, )
+    #b = plot_2D(T_g, time, z_lvl)
+    #plt.show(b)
+    #plot_2D(Alpha, z_lvl, time)
+    #plot_2D(HF, z_lvl, time)
     
     
+
 if __name__=="__main__":
     main()
     
