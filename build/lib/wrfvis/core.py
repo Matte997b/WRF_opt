@@ -8,8 +8,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
-from wrfvis import cfg, grid, graphics
-
+from wrfvis import cfg, grid, graphics, Two_dim_plot
 
 def get_wrf_timeseries(param, lon, lat, zagl):
     """Read the time series from the WRF output file.
@@ -98,7 +97,7 @@ def mkdir(path, reset=False):
     return path
 
 
-def write_html(param, lon, lat, zagl, directory=None):
+def write_html(param=None, lon=None, lat=None, zagl=None, t=None, elevation=None, directory=None):
     """ Create HTML with WRF plot 
     
     Returns
@@ -125,6 +124,9 @@ def write_html(param, lon, lat, zagl, directory=None):
     png = os.path.join(directory, 'topography.png')
     graphics.plot_topo(hgt, (df.attrs['lon_grid_point'], 
                        df.attrs['lat_grid_point']), filepath=png)
+    
+    # plot 2D map
+    png = os.path.join(directory, '2D_variable.png')
 
     # create HTML from template
     outpath = os.path.join(directory, 'index.html')

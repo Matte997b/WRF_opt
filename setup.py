@@ -53,7 +53,9 @@ req_packages = ['numpy',
                 'pandas',
                 'xarray',
                 'matplotlib',
-                'netCDF4',
+                'pytest',
+                'windrose',
+                'metpy',
                 ]
 
 check_dependencies(req_packages)
@@ -79,7 +81,7 @@ setup(
     # There are some restrictions on what makes a valid project name
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
-    name='wrfvis',  # Required
+    name='wrfvis_o',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -87,7 +89,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.0.1',  # Required
+    version='1.0.0',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -124,7 +126,8 @@ setup(
 
     # This should be your name or the name of the organization which owns the
     # project.
-    author='Manuela Lehner',  # Optional
+    author='Manuela Lenher',  # Optional
+    student = 'Battisti Mattia', #Optional
 
     # This should be a valid email address corresponding to the author listed
     # above.
@@ -201,10 +204,11 @@ setup(
     #
     # For example, the following would provide a command called `sample` which
     # executes the function `main` from this package when invoked:
-    entry_points={  # Optional
-        'console_scripts': [
-            'wrfvis_gridcell=wrfvis.cltools:wrfvis_gridcell',
-        ],
+    entry_points={
+    'console_scripts': [
+        'wrfvis_gridcell_o=wrfvis.cltools:wrfvis_gridcell_o',
+        'wrfvis_parameters_o=wrfvis.cltools:wrfvis_parameters_o',
+    ],
     },
 
     # List additional URLs that are relevant to your project as a dict.
