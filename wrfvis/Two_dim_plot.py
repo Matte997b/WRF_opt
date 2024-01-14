@@ -75,58 +75,74 @@ def df_2D(param, zagl, t):
     return data_array
 
 
-def df_2D_geo(param, target_potential_temperature, time):
+'''def df_2D_geo_var(param, target_geopotential_height, time_step, level):
     """
     Work in progress function
-    NB the command line in the README.txt works anyway
     
     Parameters:
     - param: variable name
-    - target_potential_temperature: int target potential temperature
-    - time: int selected time
+    - target_geopotential_height: float target geopotential height
+    - time_step: int selected time step
     
     Returns:
-    - data_array: data ectracted at selected time and geopotential hight
-    - wrf_hgt: elevazione xarray DataArray
+    - variable_at_height: data extracted at selected time, target geopotential height
     """
-    
     with xr.open_dataset(cfg.wrfout) as ds:
-        # Sostituisci la coordinata del tempo con i tempi datetime
-        ds = ds.assign_coords({'Time': pd.to_datetime(ds.Times.data.astype(str), format='%Y-%m-%d_%H:%M:%S')})
-        
-        # Estrai lon, lat e valori della variabile
-        lon = ds.XLONG[0, :, :]
-        lat = ds.XLAT[0, :, :]
-        
-        # Calcola l'altezza geopotenziale (esempio: somma di altezza geopotenziale ed altezza del terreno)
-        geopotential_height = ds['PH'].values + ds['PHB'].values
-        terrain_height = ds['HGT'].values
-        terrain_height_expanded = terrain_height[:, np.newaxis, :, :]
-        total_geopotential_height = geopotential_height + terrain_height_expanded
+        # Convert time step to the corresponding time index
+        time_index = time_step
 
-        # Definisci la temperatura potenziale target
-        target_index = np.argmin(np.abs(ds['T'].values[:, :, :, :] - target_potential_temperature), axis=1)
-        print(target_index.shape)
+        # Calcola l'altezza geopotenziale totale
+        geopotential_total = ds['PH'] + ds['PHB']
         
-        if param in ds.variables:
-            # Estrai i valori della variabile al livello corrispondente alla temperatura potenziale target
-            vararray = ds[param].values[:, int(target_potential_temperature), target_index[0, :, :], target_index[1, :, :]]
-        else:
-            raise ValueError(f"Variabile '{param}' non trovata nel dataset.")
-            
-    # Creazione di DataArray
-    data_array = xr.DataArray(
-        vararray,
-        coords={'Time': ds['Time'], 'lat': lat.values[:, 0], 'lon': lon.values[0, :]},
-        dims=['Time', 'lat', 'lon']
-    )
+        varray = geopotential_total[int(time_step), :, :, :]
 
-    # Aggiungi attributi al data array
-    data_array.attrs['variable_name'] = param
-    data_array.attrs['variable_units'] = ds[param].units
-    data_array.attrs['target_potential_temperature'] = target_potential_temperature
+    return varray'''
 
-    return data_array
+
+
+def df_2D_geo_var(param, target_geopotential_height, time_step, level):
+    """
+    Work in progress function
+    
+    Parameters:
+    - param: variable name
+    - target_geopotential_height: float target geopotential height
+    - time_step: int selected time step
+    
+    Returns:
+    - variable_at_height: data extracted at selected time, target geopotential height
+    - variable_at_same_height: data extracted from the same variable at the same geopotential height
+    """
+    with xr.open_dataset(cfg.wrfout) as ds:
+        # Convert time step to the corresponding time index
+        time_index = time_step
+
+        # Calcola l'altezza geopotenziale totale
+        print(ds['PH'])
+        print('PH', ds['PH'][time_step, :, :, :].attrs)
+        print('PHB', ds['PHB'][time_step, :, :, :].attrs)
+        geopotential_total = ((ds['PHB'][time_step, 0, :, :] + ds['PH'][time_step, 0, :, :]) - ds['HGT'][0, :, :])
+        plt.imshow(geopotential_total[:,:])
+        plt.colorbar(label='Valori della variabile')  # Aggiungi la barra dei colori
+        # Trova gli indici dove l'altezza geopotenziale è vicina al valore target
+        indices_same_geopotential = np.where(np.isclose(geopotential_total.isel(Time=time_index).values, target_geopotential_height))
+
+        # Estrai i valori della variabile alla stessa altezza geopotenziale
+        variable_at_same_geopotential = ds[param].isel(Time=time_index, bottom_top=level,
+                                                      south_north=indices_same_geopotential[1],
+                                                      west_east=indices_same_geopotential[2])
+
+        # Rimuovi eventuali dimensioni aggiuntive di grandezza 1
+        variable_at_same_geopotential = variable_at_same_geopotential.squeeze()
+
+        # Estrai i valori della variabile per l'intero dominio alla stessa altezza geopotenziale
+        variable_at_height = ds[param].isel(Time=time_index, bottom_top=level) + 300
+
+    #return variable_at_height
+
+
+
+
 
 
 def plot_2D(data_array, time, elevation):
@@ -172,7 +188,8 @@ def plot_2D(data_array, time, elevation):
     plt.axis('off')
     cb = plt.colorbar(da_plt, ax=ax, fraction=0.1, format='%.0f')
     cb.ax.set_ylabel(f'${var_name}$ ({var_units})', fontsize = 15)
-    plt.suptitle(f'${var_name}$[{var_units}] t={time} z={elevation}', x=0.5, y=0.95, ha='center', fontsize = 15)
+    plt.suptitle(f'${var_name}$[{var_units}] t={time} z={elevation}', x=0.5, 
+                 y=0.95, ha='center', fontsize = 15)
     
     plt.xlabel('Longitude(°)')
     plt.ylabel('Latitude(°)')

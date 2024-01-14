@@ -5,10 +5,11 @@
 
 from wrfvis.core import write_html
 from wrfvis.core import get_wrf_timeseries
-from wrfvis.Two_dim_plot import df_2D, plot_2D, df_2D_geo #, find_geopotential_height_all_locations
+from wrfvis.Two_dim_plot import df_2D, plot_2D, df_2D_geo_var#, df_2D_geo find_geopotential_height_all_locations
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
+from wrfvis.cfg import wrfout
 
 def main():
     
@@ -23,7 +24,7 @@ def main():
     #HF = df_2D(grid.wrf_zagl, z_lvl, time)
     
     #T_ = df_2D(var, z_lvl, time)
-    ds = get_wrf_timeseries(var, 10, 40, 0)
+    #ds = get_wrf_timeseries(var, 10, 40, 0)
     #T_g = df_2D_geo(var, z_lvl, time)
     
     #lon = da['XLONG'].values[0, :, :]
@@ -40,6 +41,21 @@ def main():
     #plt.show(b)
     #plot_2D(Alpha, z_lvl, time)
     #plot_2D(HF, z_lvl, time)
+    
+    ds = xr.open_dataset(wrfout)
+    print(ds.data_vars)
+    
+    variable_at_height = df_2D_geo_var(var, 5500, 0, 0)
+    
+    '''# Plotta la matrice in 2D
+    plt.imshow(variable_at_height, cmap='viridis', origin='lower')
+    plt.colorbar(label='Valori della variabile')  # Aggiungi la barra dei colori
+    plt.xlabel('Longitudine')
+    plt.ylabel('Latitudine')
+    plt.title('Rappresentazione 2D della variabile')
+    # Mostra il plot
+    plt.show()'''
+    
     
     
 

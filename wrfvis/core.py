@@ -99,7 +99,8 @@ def mkdir(path, reset=False):
     return path
 
 
-def write_html(param=None, lon=None, lat=None, zagl=None, t=None, elevation=None, directory=None, ds = None):
+def write_html(param=None, lon=None, lat=None, zagl=None, t=None, elevation=None,
+               directory=None, ds = None):
     """
     Author: Battisti Mattia
     Write an html page that contains the plots for different commands
