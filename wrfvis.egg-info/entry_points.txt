@@ -1,3 +1,0 @@
-[console_scripts]
-wrfvis_gridcell = wrfvis.cltools:wrfvis_gridcell
-wrfvis_parameters = wrfvis.cltools:wrfvis_parameters
